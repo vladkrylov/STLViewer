@@ -66,14 +66,17 @@ QVector3D STLTriangle::GetNormal()
 
 Model::Model()
 {
-    initialized = false;
+    Reset();
 }
 
 Model::Model(QVector<STLTriangle> stlModel)
 {
     if (stlModel.size() > 0) {
         initialized = true;
-        triangles = stlModel;
+        triangles.reserve(stlModel.size());
+        for(size_t i=0; i<stlModel.size(); ++i) {
+            AddTriangle(stlModel[i]);
+        }
     }
 }
 
@@ -81,6 +84,13 @@ void Model::Reset()
 {
     triangles.clear();
     initialized = false;
+
+    min_x = 0.0f;
+    max_x = 0.0f;
+    min_y = 0.0f;
+    max_y = 0.0f;
+    min_z = 0.0f;
+    max_z = 0.0f;
 }
 
 bool Model::isInitialized()
@@ -92,6 +102,17 @@ void Model::AddTriangle(STLTriangle t)
 {
     if (!initialized) {
         initialized = true;
+    }
+
+    QVector3D v;
+    for(size_t i=0; i<3; ++i) {
+        v = t.GetVertex(i);
+        if (v.x() < min_x) min_x = v.x();
+        if (v.x() > max_x) max_x = v.x();
+        if (v.y() < min_y) min_y = v.y();
+        if (v.y() > max_y) max_y = v.y();
+        if (v.z() < min_z) min_z = v.z();
+        if (v.z() > max_z) max_z = v.z();
     }
     triangles.push_back(t);
 }
@@ -105,3 +126,39 @@ size_t Model::GetNTriangles()
 {
     return triangles.size();
 }
+
+QVector3D Model::GetCenter()
+{
+    return QVector3D((min_x+max_x)/2., (min_y+max_y)/2., (min_z+max_z)/2.);
+}
+
+float Model::xMin()
+{
+    return min_x;
+}
+
+float Model::xMax()
+{
+    return max_x;
+}
+
+float Model::yMin()
+{
+    return min_y;
+}
+
+float Model::yMax()
+{
+    return max_y;
+}
+
+float Model::zMin()
+{
+    return min_z;
+}
+
+float Model::zMax()
+{
+    return max_z;
+}
+

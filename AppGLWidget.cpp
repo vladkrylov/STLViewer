@@ -24,7 +24,7 @@ void AppGLWidget::initializeGL()
     // Set up the rendering context, define display lists etc.:
     initializeOpenGLFunctions();
 
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_DEPTH_TEST);
 
 //    glEnable(GL_CULL_FACE);
@@ -32,7 +32,7 @@ void AppGLWidget::initializeGL()
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-    static GLfloat lightPosition[4] = { 0, 0, 10, 1.0 };
+    static GLfloat lightPosition[4] = { 0.f, 0.f, 1.f, 1.f };
     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
 }
@@ -53,10 +53,11 @@ void AppGLWidget::paintGL()
     // draw the scene:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    glTranslatef(0.0, 0.0, -10.0);
+//    glTranslatef(-center.x(),center.y(), -10.0f);
+    glTranslatef(0.0f, 0.0f, -10.0f);
     glScalef(scale, scale, scale);
-    glRotatef(xRot / 16.0, 1.0, 0.0, 0.0);
-    glRotatef(yRot / 16.0, 0.0, 1.0, 0.0);
+    glRotatef(xRot / 16.0f, 1.0f, 0.0f, 0.0f);
+    glRotatef(yRot / 16.0f, 0.0f, 1.0f, 0.0f);
     Draw();
 }
 
@@ -108,11 +109,14 @@ void AppGLWidget::DrawModel()
     QVector3D n;
     QVector3D v;
     STLTriangle t;
+    QVector3D center = m.GetCenter();
     for(size_t i = 0; i < m.GetNTriangles(); ++i) {
         t = m.GetTriangle(i);
         glBegin(GL_TRIANGLES);
             n = t.GetNormal();
-            glNormal3f(n.x(), n.y(), n.z());
+            glNormal3f(n.x()-center.x(),
+                       n.y()-center.y(),
+                       n.z()-center.z());
             for(size_t j=0; j<3; ++j) {
                 v = t.GetVertex(j);
                 glVertex3f(v.x(), v.y(), v.z());
@@ -128,7 +132,7 @@ void AppGLWidget::mousePressEvent(QMouseEvent *event)
 
 void AppGLWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    int rotationSpeed = 8;  // TODO: set this as a private class member?
+    int rotationSpeed = 8;  // TODO: set this as a class property?
     int dx = event->x() - mouseLastPos.x();
     int dy = event->y() - mouseLastPos.y();
     mouseLastPos = event->pos();

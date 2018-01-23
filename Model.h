@@ -31,15 +31,31 @@ public:
     Model();
     Model(QVector<STLTriangle> stlModel);
 
+    bool isInitialized();
+    void Reset();
+
     void AddTriangle(STLTriangle t);
     STLTriangle GetTriangle(int index);
     size_t GetNTriangles();
-    void Reset();
-    bool isInitialized();
+
+    QVector3D GetCenter();
+    float xMin();
+    float xMax();
+    float yMin();
+    float yMax();
+    float zMin();
+    float zMax();
 
 private:
     bool initialized;
     QVector<STLTriangle> triangles;
+
+    float min_x;
+    float max_x;
+    float min_y;
+    float max_y;
+    float min_z;
+    float max_z;
 };
 
 #endif // MODEL_H

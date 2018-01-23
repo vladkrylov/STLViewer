@@ -8,7 +8,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     STLParser parser;
-    QFile file("box_1x1x1.stl");
+//    QFile file("block100.stl");
+    QFile file("bunny.stl");
     if (!file.open(QIODevice::ReadOnly))
     {
         qDebug() << "error_missing_file()";
@@ -16,7 +17,7 @@ int main(int argc, char *argv[])
     }
     Model m = parser.parse(file);
     AppGLWidget glwidget;
-    glwidget.SetModel(m);
+//    glwidget.SetModel(m);
     glwidget.show();
 
     return app.exec();
