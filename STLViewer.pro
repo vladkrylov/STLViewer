@@ -13,10 +13,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    AppGLWidget.cpp
+    AppGLWidget.cpp \
+    STLParser.cpp \
+    Model.cpp
 
 HEADERS  += \
-    AppGLWidget.h
+    AppGLWidget.h \
+    STLParser.h \
+    Model.h
 
 FORMS    +=
 

@@ -3,6 +3,7 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
+#include "Model.h"
 
 class AppGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 {
@@ -11,6 +12,8 @@ class AppGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
 public:
     explicit AppGLWidget(QOpenGLWidget *parent = 0);
     ~AppGLWidget();
+
+    void SetModel(Model model);
 
 protected:
     // opengl stuff
@@ -24,7 +27,10 @@ protected:
     void wheelEvent(QWheelEvent *event);
 
 private:
-    void draw();
+    void Draw();
+    void DrawModel();
+
+    Model m;
 
     QPoint mouseLastPos;
     int xRot;

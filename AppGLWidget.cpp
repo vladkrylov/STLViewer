@@ -14,6 +14,11 @@ AppGLWidget::~AppGLWidget()
 {
 }
 
+void AppGLWidget::SetModel(Model model)
+{
+    m = model;
+}
+
 void AppGLWidget::initializeGL()
 {
     // Set up the rendering context, define display lists etc.:
@@ -29,8 +34,7 @@ void AppGLWidget::initializeGL()
 
     static GLfloat lightPosition[4] = { 0, 0, 10, 1.0 };
     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-//    static GLfloat lightPosition[4] = { 0, 0, 10, 1.0 };
-//    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
+
 }
 
 void AppGLWidget::resizeGL(int w, int h)
@@ -53,44 +57,68 @@ void AppGLWidget::paintGL()
     glScalef(scale, scale, scale);
     glRotatef(xRot / 16.0, 1.0, 0.0, 0.0);
     glRotatef(yRot / 16.0, 0.0, 1.0, 0.0);
-    draw();
+    Draw();
 }
 
-void AppGLWidget::draw()
+void AppGLWidget::Draw()
+{
+    // check if model has been initialized
+    if (m.isInitialized()) {
+        DrawModel();
+    } else {
+        glColor3b(1, 0, 0);
+        glBegin(GL_QUADS);
+            glNormal3f(0,0,-1);
+            glVertex3f(-1,-1,0);
+            glVertex3f(-1,1,0);
+            glVertex3f(1,1,0);
+            glVertex3f(1,-1,0);
+
+        glEnd();
+        glBegin(GL_TRIANGLES);
+            glNormal3f(0,-1,0.707);
+            glVertex3f(-1,-1,0);
+            glVertex3f(1,-1,0);
+            glVertex3f(0,0,1.2);
+        glEnd();
+        glBegin(GL_TRIANGLES);
+            glNormal3f(1,0, 0.707);
+            glVertex3f(1,-1,0);
+            glVertex3f(1,1,0);
+            glVertex3f(0,0,1.2);
+        glEnd();
+        glBegin(GL_TRIANGLES);
+            glNormal3f(0,1,0.707);
+            glVertex3f(1,1,0);
+            glVertex3f(-1,1,0);
+            glVertex3f(0,0,1.2);
+        glEnd();
+        glBegin(GL_TRIANGLES);
+            glNormal3f(-1,0,0.707);
+            glVertex3f(-1,1,0);
+            glVertex3f(-1,-1,0);
+            glVertex3f(0,0,1.2);
+        glEnd();
+    }
+}
+
+void AppGLWidget::DrawModel()
 {
     glColor3b(1, 0, 0);
-    glBegin(GL_QUADS);
-        glNormal3f(0,0,-1);
-        glVertex3f(-1,-1,0);
-        glVertex3f(-1,1,0);
-        glVertex3f(1,1,0);
-        glVertex3f(1,-1,0);
-
-    glEnd();
-    glBegin(GL_TRIANGLES);
-        glNormal3f(0,-1,0.707);
-        glVertex3f(-1,-1,0);
-        glVertex3f(1,-1,0);
-        glVertex3f(0,0,1.2);
-    glEnd();
-    glBegin(GL_TRIANGLES);
-        glNormal3f(1,0, 0.707);
-        glVertex3f(1,-1,0);
-        glVertex3f(1,1,0);
-        glVertex3f(0,0,1.2);
-    glEnd();
-    glBegin(GL_TRIANGLES);
-        glNormal3f(0,1,0.707);
-        glVertex3f(1,1,0);
-        glVertex3f(-1,1,0);
-        glVertex3f(0,0,1.2);
-    glEnd();
-    glBegin(GL_TRIANGLES);
-        glNormal3f(-1,0,0.707);
-        glVertex3f(-1,1,0);
-        glVertex3f(-1,-1,0);
-        glVertex3f(0,0,1.2);
-    glEnd();
+    QVector3D n;
+    QVector3D v;
+    STLTriangle t;
+    for(size_t i = 0; i < m.GetNTriangles(); ++i) {
+        t = m.GetTriangle(i);
+        glBegin(GL_TRIANGLES);
+            n = t.GetNormal();
+            glNormal3f(n.x(), n.y(), n.z());
+            for(size_t j=0; j<3; ++j) {
+                v = t.GetVertex(j);
+                glVertex3f(v.x(), v.y(), v.z());
+            }
+        glEnd();
+    }
 }
 
 void AppGLWidget::mousePressEvent(QMouseEvent *event)
@@ -115,3 +143,4 @@ void AppGLWidget::wheelEvent(QWheelEvent *event)
     scale *= 1 + event->delta() * (s0 - 1);
     update();
 }
+
