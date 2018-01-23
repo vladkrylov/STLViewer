@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
     }
     Model m = parser.parse(file);
     AppGLWidget glwidget;
-//    glwidget.SetModel(m);
+    glwidget.SetModel(m);
     glwidget.show();
 
     return app.exec();

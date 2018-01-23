@@ -4,8 +4,8 @@
 
 AppGLWidget::AppGLWidget(QOpenGLWidget *parent)
 {
-    xRot = 100;
-    yRot = 50;
+    xRot = 300;
+    yRot = 500;
     scale = 1.0f;
     s0 = 1.001f;
 }
@@ -27,12 +27,10 @@ void AppGLWidget::initializeGL()
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_DEPTH_TEST);
 
-//    glEnable(GL_CULL_FACE);
-//    glShadeModel(GL_SMOOTH);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
-    static GLfloat lightPosition[4] = { 0.f, 0.f, 1.f, 1.f };
+    static GLfloat lightPosition[4] = { 0.f, 0.f, 1.f, 0.f };
     glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
 
 }
@@ -42,9 +40,18 @@ void AppGLWidget::resizeGL(int w, int h)
     // setup viewport, projection etc.:
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
+    int l = qMin(w, h);
+    glViewport(0, 0, l, l);
+    if (m.isInitialized()) {
+        float wf = m.xMax() - m.xMin();
+        float hf = m.yMax() - m.yMin();
+        float df = m.yMax() - m.yMin();
+        float diag = sqrt(wf*wf + hf*hf + df*df);
+        glOrtho(-0.5*diag, +0.5*diag, -0.5*diag, +0.5*diag, 2.0, 2.0+2*diag);
+    } else {
+        glOrtho(-1.5, +1.5, -1.5, +1.5, 3.8, 6.);
+    }
 
-    glViewport(0, 0, w, h);
-    glOrtho(-2, +2, -2, +2, 1.0, 15.0);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -53,8 +60,12 @@ void AppGLWidget::paintGL()
     // draw the scene:
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-//    glTranslatef(-center.x(),center.y(), -10.0f);
-    glTranslatef(0.0f, 0.0f, -10.0f);
+    if (m.isInitialized()) {
+        float d = m.zMax() - m.zMin();
+        glTranslatef(0.0f, 0.0f, -2.0f-d);
+    } else {
+        glTranslatef(0.0f, 0.0f, -5.0f);
+    }
     glScalef(scale, scale, scale);
     glRotatef(xRot / 16.0f, 1.0f, 0.0f, 0.0f);
     glRotatef(yRot / 16.0f, 0.0f, 1.0f, 0.0f);
@@ -110,16 +121,17 @@ void AppGLWidget::DrawModel()
     QVector3D v;
     STLTriangle t;
     QVector3D center = m.GetCenter();
+
     for(size_t i = 0; i < m.GetNTriangles(); ++i) {
         t = m.GetTriangle(i);
         glBegin(GL_TRIANGLES);
             n = t.GetNormal();
-            glNormal3f(n.x()-center.x(),
-                       n.y()-center.y(),
-                       n.z()-center.z());
+            glNormal3f(n.x(), n.y(), n.z());
             for(size_t j=0; j<3; ++j) {
                 v = t.GetVertex(j);
-                glVertex3f(v.x(), v.y(), v.z());
+                glVertex3f(v.x()-center.x(),
+                           v.y()-center.y(),
+                           v.z()-center.z());
             }
         glEnd();
     }
