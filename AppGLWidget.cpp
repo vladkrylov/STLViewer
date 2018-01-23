@@ -6,7 +6,8 @@ AppGLWidget::AppGLWidget(QOpenGLWidget *parent)
 {
     xRot = 100;
     yRot = 50;
-    zRot = 0;
+    scale = 1.0f;
+    s0 = 1.001f;
 }
 
 AppGLWidget::~AppGLWidget()
@@ -49,9 +50,9 @@ void AppGLWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     glTranslatef(0.0, 0.0, -10.0);
+    glScalef(scale, scale, scale);
     glRotatef(xRot / 16.0, 1.0, 0.0, 0.0);
     glRotatef(yRot / 16.0, 0.0, 1.0, 0.0);
-    glRotatef(zRot / 16.0, 0.0, 0.0, 1.0);
     draw();
 }
 
@@ -106,5 +107,11 @@ void AppGLWidget::mouseMoveEvent(QMouseEvent *event)
 
     xRot += rotationSpeed*dy;
     yRot += rotationSpeed*dx;
+    update();
+}
+
+void AppGLWidget::wheelEvent(QWheelEvent *event)
+{
+    scale *= 1 + event->delta() * (s0 - 1);
     update();
 }

@@ -21,6 +21,7 @@ protected:
     // user event handlers
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
+    void wheelEvent(QWheelEvent *event);
 
 private:
     void draw();
@@ -28,7 +29,7 @@ private:
     QPoint mouseLastPos;
     int xRot;
     int yRot;
-    int zRot;
+    float scale, s0;
 };
 
 #endif // AppGLWidget_H
