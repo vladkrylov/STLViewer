@@ -18,6 +18,7 @@ public:
 
     void SetNBins(int nbinsNew);
     void SetBinWidth(double binWidthNew);
+    void SetUserDispRange(double xmin, double xmax);
 
     void Plot();
 
@@ -29,6 +30,10 @@ private:
     int nbins;
     double binsGap;
     double relativeBinWidth;
+
+    bool rangeDefinedByUser;
+    double userXMinDisp;
+    double userXMaxDisp;
 
     double min(const QVector<double>& v) const;
     double max(const QVector<double>& v) const;

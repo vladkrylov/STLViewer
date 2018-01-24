@@ -33,6 +33,10 @@ void HistWidget::Reset()
     nbins = 0;
     binsGap = 0.;
     relativeBinWidth = 1.;
+
+    rangeDefinedByUser = false;
+    userXMinDisp = 0.;
+    userXMaxDisp = 0.;
 }
 
 void HistWidget::CalculateHist()
@@ -61,8 +65,8 @@ void HistWidget::CalculateHist()
 
     xPlot.clear();
     yPlot.clear();
-    xPlot.insert(xPlot.begin(), nbins*4, 0.);
-    yPlot.insert(yPlot.begin(), nbins*4, 0.);
+    xPlot.insert(xPlot.begin(), nbins*2, 0.);
+    yPlot.insert(yPlot.begin(), nbins*2, 0.);
 
     // create vector of indices
     QVector<int> index(x.size(), 0);
@@ -84,10 +88,8 @@ void HistWidget::CalculateHist()
     for(int i=0; i<nbins; ++i) {
         // build bin representation
         double binCenter = xMin + i*binsGap + binWidth/2.;
-        xPlot[4*i] = binCenter - binWidth/2.;
-        xPlot[4*i+1] = xPlot[4*i];
-        xPlot[4*i+2] = binCenter + binWidth/2.;
-        xPlot[4*i+3] = xPlot[4*i+2];
+        xPlot[2*i] = binCenter - binWidth/2.;
+        xPlot[2*i+1] = binCenter + binWidth/2.;
         double yval = 0.;
         // loop through all data points
         for(int j=0; j<nPoints; ++j) {
@@ -98,15 +100,13 @@ void HistWidget::CalculateHist()
                 yval += y[index[j]];
             }
         }
-        yPlot[4*i] = 0.;
-        yPlot[4*i+1] = yval;
-        yPlot[4*i+2] = yval;
-        yPlot[4*i+3] = 0.;
+        yPlot[2*i] = 0.;
+        yPlot[2*i+1] = yval;
     }
-//    qDebug() << min(xPlot) << max(xPlot);
-//    for(int i=0; i<xPlot.size(); ++i) {
-//        qDebug() << xPlot[i] << yPlot[i];
-//    }
+    // add a point to correctly finish histogram
+    xPlot.push_back(xMax+binsGap);
+    yPlot.push_back(0.);
+
 }
 
 void HistWidget::SetX(const QVector<double>& xNew)
@@ -150,6 +150,18 @@ void HistWidget::SetBinWidth(double relativeBinWidthNew)
     relativeBinWidth = relativeBinWidthNew;
 }
 
+void HistWidget::SetUserDispRange(double xmin, double xmax)
+{
+    if (xmin >= xmax) {
+        qDebug() << "Wrong user range limits!";
+        rangeDefinedByUser = false;
+        return;
+    }
+    rangeDefinedByUser = true;
+    userXMinDisp = xmin;
+    userXMaxDisp = xmax;
+}
+
 void HistWidget::Plot()
 {
     CalculateHist();
@@ -159,7 +171,11 @@ void HistWidget::Plot()
     graph()->setName("Histogram");
     graph()->setData(xPlot, yPlot);
     graph()->setLineStyle(QCPGraph::lsStepRight);
-    xAxis->setRange(min(xPlot) - binsGap/2., max(xPlot) + binsGap/2.);
+    if (rangeDefinedByUser) {
+        xAxis->setRange(userXMinDisp, userXMaxDisp);
+    } else {
+        xAxis->setRange(min(xPlot) - binsGap/2., max(xPlot) + binsGap/2.);
+    }
     yAxis->setRange(0., max(yPlot)*1.1);
     axisRect()->setupFullAxesBox();
     replot();
