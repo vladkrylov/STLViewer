@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtWidgets>
 #include "AppGLWidget.h"
+#include "HistWidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -26,6 +27,7 @@ private:
     Ui::MainWindow *ui;
     QLabel* statusLabel;
     AppGLWidget* glView;
+    HistWidget* analysisWidget;
 
 private slots:
     void LoadFile();

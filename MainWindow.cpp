@@ -11,12 +11,24 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("STLViewer");
     ui->setupUi(this);
 
-    QGridLayout *layout3Dview = new QGridLayout(ui->tab3D);
+    // 3D tab widgets
+    QGridLayout *layout3DView = new QGridLayout(ui->tab3D);
     glView = new AppGLWidget(ui->tab3D);
 
-    layout3Dview->addWidget(glView);
-    ui->tab3D->setLayout(layout3Dview);
+    layout3DView->addWidget(glView);
+    ui->tab3D->setLayout(layout3DView);
 
+    // Histogram tab widget
+    QGridLayout *layoutAnalysisView = new QGridLayout(ui->tabAnalysis);
+    analysisWidget = new HistWidget(ui->tabAnalysis);
+
+    layoutAnalysisView->addWidget(analysisWidget);
+    ui->tabAnalysis->setLayout(layoutAnalysisView);
+
+    // test plot
+    analysisWidget->replot();
+
+    // statusbar
     statusLabel = new QLabel(ui->statusbar);
     statusLabel->setText("Default model");
     ui->statusbar->addWidget(statusLabel);

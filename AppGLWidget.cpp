@@ -9,10 +9,6 @@ AppGLWidget::AppGLWidget(QWidget *parent)
     yRot = 70;
     scale = 1.0f;
     s0 = 1.001f;
-//    if (parent) {
-////        QAction::connect(parent, &QOpenGLWidget::resized, this, &AppGLWidget::resize);
-//        resize(parent->width(), parent->height());
-//    }
 }
 
 AppGLWidget::~AppGLWidget()
