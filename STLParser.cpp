@@ -30,7 +30,9 @@ Model STLParser::parse(QFile& file)
         // set model name
         if (parts[0] == "solid") {
             if (parts.length() > 2) {
-                name = parts[1];
+                QStringList nameParts = parts;
+                nameParts.removeFirst();
+                m.SetName(nameParts.join(' '));
             }
         }
         // start facet

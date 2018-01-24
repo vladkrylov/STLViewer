@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtWidgets>
 #include "AppGLWidget.h"
 
 namespace Ui {
@@ -20,10 +21,10 @@ public slots:
 
 
 private:
-    Ui::MainWindow *ui;
-
     void connectSignalsSlots();
 
+    Ui::MainWindow *ui;
+    QLabel* statusLabel;
     AppGLWidget* glView;
 
 private slots:

@@ -82,6 +82,7 @@ Model::Model(QVector<STLTriangle> stlModel)
 
 void Model::Reset()
 {
+    name = "";
     triangles.clear();
     initialized = false;
 
@@ -91,6 +92,16 @@ void Model::Reset()
     max_y = 0.0f;
     min_z = 0.0f;
     max_z = 0.0f;
+}
+
+void Model::SetName(QString newName)
+{
+    name = newName;
+}
+
+QString Model::GetName()
+{
+    return name;
 }
 
 bool Model::isInitialized()

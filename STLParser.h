@@ -13,7 +13,6 @@ public:
 
 private:
     enum parser_status {PARSE_OK, PARSE_FAILED};
-    QString name;
 };
 
 #endif // STLPARSER_H

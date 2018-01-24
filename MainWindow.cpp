@@ -17,6 +17,10 @@ MainWindow::MainWindow(QWidget *parent) :
     layout3Dview->addWidget(glView);
     ui->tab3D->setLayout(layout3Dview);
 
+    statusLabel = new QLabel(ui->statusbar);
+    statusLabel->setText("Default model");
+    ui->statusbar->addWidget(statusLabel);
+
     connectSignalsSlots();
 }
 
@@ -46,6 +50,8 @@ void MainWindow::LoadFile()
         if (m.isInitialized()) {
             glView->SetModel(m);
             glView->show();
+            // FIXME: what if filename is veery long?
+            statusLabel->setText(filename + ": " + m.GetName());
         } else {
             qDebug() << "Cannot read  ASCII .stl file";
         }

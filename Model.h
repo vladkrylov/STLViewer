@@ -35,6 +35,9 @@ public:
     void DeInitialize();
     void Reset();
 
+    void SetName(QString newName);
+    QString GetName();
+
     void AddTriangle(STLTriangle t);
     STLTriangle GetTriangle(int index);
     size_t GetNTriangles();
@@ -48,6 +51,7 @@ public:
     float zMax();
 
 private:
+    QString name;
     bool initialized;
     QVector<STLTriangle> triangles;
 
