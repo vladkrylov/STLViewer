@@ -4,20 +4,32 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui opengl
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 TARGET = STLViewer
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+SOURCES += main.cpp \
+    AppGLWidget.cpp \
+    STLParser.cpp \
+    Model.cpp \
+    MainWindow.cpp \
+    qcustomplot.cpp \
+    HistWidget.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += \
+    AppGLWidget.h \
+    STLParser.h \
+    Model.h \
+    MainWindow.h \
+    qcustomplot.h \
+    HistWidget.h
 
-FORMS    += mainwindow.ui
+FORMS    += \
+    MainWindow.ui
 
 DISTFILES += \
     .gitignore
