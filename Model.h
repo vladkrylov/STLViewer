@@ -16,6 +16,7 @@ public:
 
     void Reset();
     float GetArea();
+    float GetTheta();
 
 
 private:
@@ -40,7 +41,7 @@ public:
 
     void AddTriangle(STLTriangle t);
     STLTriangle GetTriangle(int index);
-    size_t GetNTriangles();
+    int GetNTriangles();
 
     QVector3D GetCenter();
     float xMin();

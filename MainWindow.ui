@@ -49,14 +49,7 @@
     </property>
     <addaction name="actionOpen"/>
    </widget>
-   <widget class="QMenu" name="menuAnalysis">
-    <property name="title">
-     <string>A&amp;nalysis</string>
-    </property>
-    <addaction name="actionTrianglesHistogram"/>
-   </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuAnalysis"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen">
