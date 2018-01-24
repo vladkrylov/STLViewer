@@ -5,23 +5,6 @@ HistWidget::HistWidget(QWidget *parent)
     : QCustomPlot(parent)
 {
     Reset();
-
-    // test example stuff
-    int n = 10;
-    QVector<double> xt(n), yt(n);
-    for (int i=0; i<n; i++) {
-        xt[i] = i;
-        yt[i] = i*i;
-    }
-    xt[5] = 9;
-
-    SetHistData(xt, yt);
-    SetNBins(10);
-    SetBinWidth(0.5);
-    Plot();
-//    for(int i=0; i<xPlot.size(); ++i) {
-//        qDebug() << xPlot[i] << yPlot[i];
-//    }
 }
 
 void HistWidget::Reset()

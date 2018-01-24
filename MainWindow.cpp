@@ -71,7 +71,6 @@ void MainWindow::LoadFile()
             for(int i=0; i<nTriangles; ++i) {
                 x[i] = m.GetTriangle(i).GetTheta();
                 y[i] = m.GetTriangle(i).GetArea();
-                qDebug() << x[i] << y[i];
             }
             analysisWidget->SetHistData(x, y);
             analysisWidget->SetNBins(100);
