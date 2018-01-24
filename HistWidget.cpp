@@ -13,6 +13,7 @@ HistWidget::HistWidget(QWidget *parent)
         xt[i] = i;
         yt[i] = i*i;
     }
+    xt[5] = 9;
 //    addGraph();
 //    graph()->setName("Histogram");
 //    graph()->setData(x, y);
@@ -27,9 +28,12 @@ HistWidget::HistWidget(QWidget *parent)
 
     SetHistData(xt, yt);
     SetNBins(10);
-    SetBinWidth(1.);
+    SetBinWidth(0.5);
     CalculateHist();
     Plot();
+//    for(int i=0; i<xPlot.size(); ++i) {
+//        qDebug() << xPlot[i] << yPlot[i];
+//    }
 }
 
 void HistWidget::Reset()
@@ -72,18 +76,40 @@ void HistWidget::CalculateHist()
     xPlot.insert(xPlot.begin(), nbins*4, 0.);
     yPlot.insert(yPlot.begin(), nbins*4, 0.);
 
+    // create vector of indices
+    QVector<int> index(x.size(), 0);
+    for (int i = 0 ; i != index.size() ; i++) {
+        index[i] = i;
+    }
+    std::sort(index.begin(), index.end(),
+        [&](const int& a, const int& b) {
+            return (x[a] < x[b]);
+        }
+    );
+    // now index is a vector of indices which correspond to the sorted x vector
+    // i.e. x[index[0]] <= x[index[1]] <= ... <= x[index[N]]
+
     double xMax = max(x);
     double xMin = min(x);
     binsGap = (xMax-xMin) / (nbins-1);
     double binWidth = binsGap * relativeBinWidth;
     for(int i=0; i<nbins; ++i) {
         // build bin representation
-        double binCenter = i*binsGap + binsGap/2.;
+        double binCenter = i*binsGap + binWidth/2.;
         xPlot[4*i] = binCenter - binWidth/2.;
         xPlot[4*i+1] = xPlot[4*i]*1.0001;
         xPlot[4*i+2] = binCenter + binWidth/2.;
         xPlot[4*i+3] = xPlot[4*i+2]*1.0001;
-        double yval = 1.;  // FIXME!!!
+        double yval = 0.;
+        // loop through all data points
+        for(int j=0; j<nPoints; ++j) {
+            double xj = x[index[j]];
+            // check if the point.x is within current bin
+            if (xj >= (binCenter - binsGap/2.) && xj < (binCenter + binsGap/2.)) {
+                // if so, increment the bin height accordingly
+                yval += y[index[j]];
+            }
+        }
         yPlot[4*i] = 0.;
         yPlot[4*i+1] = yval;
         yPlot[4*i+2] = yval;
