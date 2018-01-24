@@ -74,7 +74,7 @@ Model::Model(QVector<STLTriangle> stlModel)
     if (stlModel.size() > 0) {
         initialized = true;
         triangles.reserve(stlModel.size());
-        for(size_t i=0; i<stlModel.size(); ++i) {
+        for(int i=0; i<stlModel.size(); ++i) {
             AddTriangle(stlModel[i]);
         }
     }
@@ -96,6 +96,11 @@ void Model::Reset()
 bool Model::isInitialized()
 {
     return initialized;
+}
+
+void Model::DeInitialize()
+{
+    initialized = false;
 }
 
 void Model::AddTriangle(STLTriangle t)

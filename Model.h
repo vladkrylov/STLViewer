@@ -32,6 +32,7 @@ public:
     Model(QVector<STLTriangle> stlModel);
 
     bool isInitialized();
+    void DeInitialize();
     void Reset();
 
     void AddTriangle(STLTriangle t);

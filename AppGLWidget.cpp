@@ -65,11 +65,11 @@ void AppGLWidget::paintGL()
         float hf = m.yMax() - m.yMin();
         float df = m.zMax() - m.zMin();
         float diag = sqrt(wf*wf + hf*hf + df*df);
-        glOrtho(-0.5*diag, +0.5*diag, -0.5*diag, +0.5*diag, 2.0, 2.0+diag);
+        glOrtho(-0.5*diag, +0.5*diag, -0.5*diag, +0.5*diag, 2.0, 2.0+2*diag);
         glTranslatef(0.0f, 0.0f, -2.0f-diag);
     } else {
-        glOrtho(-1.5, +1.5, -1.5, +1.5, 3.8, 6.);
-        glTranslatef(0.0f, 0.0f, -5.0f);
+        glOrtho(-1.5, +1.5, -1.5, +1.5, 2.0, 9.0);
+        glTranslatef(0.0f, 0.0f, -5.5f);
     }
 
     glMatrixMode(GL_MODELVIEW);
@@ -87,24 +87,24 @@ void AppGLWidget::Draw()
     } else {
         glColor3b(1, 0, 0);
         glBegin(GL_QUADS);
-            glNormal3f(0,0,-1);
-            glVertex3f(-1,-1,0);
-            glVertex3f(-1,1,0);
-            glVertex3f(1,1,0);
-            glVertex3f(1,-1,0);
+            glNormal3f(0, 0, -1);
+            glVertex3f(-1, -1, 0);
+            glVertex3f(-1, 1, 0);
+            glVertex3f(1, 1, 0);
+            glVertex3f(1, -1, 0);
 
         glEnd();
         glBegin(GL_TRIANGLES);
-            glNormal3f(0,-1,0.707);
-            glVertex3f(-1,-1,0);
-            glVertex3f(1,-1,0);
-            glVertex3f(0,0,1.2);
+            glNormal3f(0, -1, 0.707);
+            glVertex3f(-1, -1, 0);
+            glVertex3f(1, -1, 0);
+            glVertex3f(0, 0, 1.2);
         glEnd();
         glBegin(GL_TRIANGLES);
-            glNormal3f(1,0, 0.707);
-            glVertex3f(1,-1,0);
-            glVertex3f(1,1,0);
-            glVertex3f(0,0,1.2);
+            glNormal3f(1, 0, 0.707);
+            glVertex3f(1, -1, 0);
+            glVertex3f(1, 1, 0);
+            glVertex3f(0, 0, 1.2);
         glEnd();
         glBegin(GL_TRIANGLES);
             glNormal3f(0,1,0.707);
@@ -113,10 +113,10 @@ void AppGLWidget::Draw()
             glVertex3f(0,0,1.2);
         glEnd();
         glBegin(GL_TRIANGLES);
-            glNormal3f(-1,0,0.707);
-            glVertex3f(-1,1,0);
-            glVertex3f(-1,-1,0);
-            glVertex3f(0,0,1.2);
+            glNormal3f(-1, 0, 0.707);
+            glVertex3f(-1, 1, 0);
+            glVertex3f(-1, -1, 0);
+            glVertex3f(0, 0, 1.2);
         glEnd();
     }
 }

@@ -39,14 +39,18 @@ void MainWindow::LoadFile()
         QFile file(filename);
         if (!file.open(QIODevice::ReadOnly))
         {
-            qDebug() << "error_missing_file()";
+            qDebug() << "Cannot open file";
             return;
         }
         Model m = parser.parse(file);
-        glView->SetModel(m);
-        glView->show();
+        if (m.isInitialized()) {
+            glView->SetModel(m);
+            glView->show();
+        } else {
+            qDebug() << "Cannot read  ASCII .stl file";
+        }
     } else {
-        qDebug() << "error_missing_file()";
+        qDebug() << "file does not exists";
         return;
     }
 }

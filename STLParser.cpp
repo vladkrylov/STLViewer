@@ -11,6 +11,7 @@ Model STLParser::parse(QFile& file)
     STLTriangle t;
     parser_status status = PARSE_OK;
     int vertexCounter = 0;
+    int linesCounter = 0;
 
     while (!file.atEnd() && status != PARSE_FAILED) {
         QString line = file.readLine().trimmed();
@@ -18,9 +19,16 @@ Model STLParser::parse(QFile& file)
         // skip blank liness
         if (parts.length() == 0) {
             continue;
+        } else {
+            ++linesCounter;
+        }
+        // check if first non-blank line starts properly
+        if (linesCounter == 0 && !line.startsWith("solid")) {
+            status = PARSE_FAILED;
+            break;
         }
         // set model name
-        else if (parts[0] == "solid") {
+        if (parts[0] == "solid") {
             if (parts.length() > 2) {
                 name = parts[1];
             }
@@ -29,7 +37,7 @@ Model STLParser::parse(QFile& file)
         else if (line.startsWith("facet normal")) {
             if (parts.length() != 5) {
                 status = PARSE_FAILED;
-                continue;
+                break;
             }
             bool ok = true;
             float nx = parts[2].toFloat(&ok);
@@ -37,7 +45,7 @@ Model STLParser::parse(QFile& file)
             float nz = parts[4].toFloat(&ok);
             if (!ok) {
                 status = PARSE_FAILED;
-                continue;
+                break;
             }
             t.Reset();
             t.SetNormal(nx, ny, nz);
@@ -60,11 +68,11 @@ Model STLParser::parse(QFile& file)
             float vz = parts[3].toFloat(&ok);
             if (!ok) {
                 status = PARSE_FAILED;
-                continue;
+                break;
             }
             if (vertexCounter > 2) {
                 status = PARSE_FAILED;
-                continue;
+                break;
             }
             t.SetVertex(vertexCounter++, QVector3D(vx, vy, vz));
         }
@@ -73,7 +81,7 @@ Model STLParser::parse(QFile& file)
             // TODO: check outer loop status
             if (parts.length() != 1) {
                 status = PARSE_FAILED;
-                continue;
+                break;
             }
         }
         // end outer loop
@@ -81,11 +89,16 @@ Model STLParser::parse(QFile& file)
             // TODO: check outer loop status
             if (parts.length() != 1) {
                 status = PARSE_FAILED;
-                continue;
+                break;
             }
             m.AddTriangle(t);
             t.Reset();
         }
+    }
+
+    if (status == PARSE_FAILED) {
+        m.DeInitialize();
+        qDebug() << "Something wrong with the model";
     }
     return m;
 }
