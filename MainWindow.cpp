@@ -64,6 +64,19 @@ void MainWindow::LoadFile()
             glView->show();
             // FIXME: what if filename is veery long?
             statusLabel->setText(filename + ": " + m.GetName());
+
+            // update the histogram
+            int nTriangles = m.GetNTriangles();
+            QVector<double> x(nTriangles), y(nTriangles);
+            for(int i=0; i<nTriangles; ++i) {
+                x[i] = m.GetTriangle(i).GetTheta();
+                y[i] = m.GetTriangle(i).GetArea();
+                qDebug() << x[i] << y[i];
+            }
+            analysisWidget->SetHistData(x, y);
+            analysisWidget->SetNBins(100);
+            analysisWidget->SetBinWidth(1.);
+            analysisWidget->Plot();
         } else {
             qDebug() << "Cannot read  ASCII .stl file";
         }

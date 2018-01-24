@@ -13,7 +13,7 @@ STLTriangle::STLTriangle()
 void STLTriangle::Reset()
 {
     n = QVector3D(0.f, 0.f, 0.f);
-    for(size_t i=0; i<3; ++i) {
+    for(int i=0; i<3; ++i) {
         v[i] = QVector3D(0.f, 0.f, 0.f);
     }
 }
@@ -33,6 +33,15 @@ float STLTriangle::GetArea()
     QVector3D AC = v[0] - v[2];
     float area = 0.5 * QVector3D::crossProduct(AB, AC).length();
     return area;
+}
+
+float STLTriangle::GetTheta()
+{
+    if (fabs(n.z()) < 0.0001) {
+        return 0.;
+    }
+    float theta = qAtan(n.z() / sqrt(n.x()*n.x() + n.y()*n.y()));
+    return qRadiansToDegrees(theta);
 }
 
 void STLTriangle::SetNormal(float nx, float ny, float nz)
@@ -124,7 +133,7 @@ void Model::AddTriangle(STLTriangle t)
     }
 
     QVector3D v;
-    for(size_t i=0; i<3; ++i) {
+    for(int i=0; i<3; ++i) {
         v = t.GetVertex(i);
         if (v.x() < min_x) min_x = v.x();
         if (v.x() > max_x) max_x = v.x();
@@ -141,7 +150,7 @@ STLTriangle Model::GetTriangle(int index)
     return triangles.at(index);
 }
 
-size_t Model::GetNTriangles()
+int Model::GetNTriangles()
 {
     return triangles.size();
 }

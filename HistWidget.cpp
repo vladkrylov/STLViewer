@@ -14,22 +14,10 @@ HistWidget::HistWidget(QWidget *parent)
         yt[i] = i*i;
     }
     xt[5] = 9;
-//    addGraph();
-//    graph()->setName("Histogram");
-//    graph()->setData(x, y);
-//    graph()->setLineStyle(QCPGraph::lsImpulse);
-//    QPen graphPen;
-//    graphPen.setColor(QColor(Qt::blue));
-//    graphPen.setWidthF(50.);
-//    graph()->setPen(graphPen);
-//    xAxis->setRange(0, 10);
-//    yAxis->setRange(0, 100);
-//    axisRect()->setupFullAxesBox();
 
     SetHistData(xt, yt);
     SetNBins(10);
     SetBinWidth(0.5);
-    CalculateHist();
     Plot();
 //    for(int i=0; i<xPlot.size(); ++i) {
 //        qDebug() << xPlot[i] << yPlot[i];
@@ -95,11 +83,11 @@ void HistWidget::CalculateHist()
     double binWidth = binsGap * relativeBinWidth;
     for(int i=0; i<nbins; ++i) {
         // build bin representation
-        double binCenter = i*binsGap + binWidth/2.;
+        double binCenter = xMin + i*binsGap + binWidth/2.;
         xPlot[4*i] = binCenter - binWidth/2.;
-        xPlot[4*i+1] = xPlot[4*i]*1.0001;
+        xPlot[4*i+1] = xPlot[4*i];
         xPlot[4*i+2] = binCenter + binWidth/2.;
-        xPlot[4*i+3] = xPlot[4*i+2]*1.0001;
+        xPlot[4*i+3] = xPlot[4*i+2];
         double yval = 0.;
         // loop through all data points
         for(int j=0; j<nPoints; ++j) {
@@ -115,6 +103,10 @@ void HistWidget::CalculateHist()
         yPlot[4*i+2] = yval;
         yPlot[4*i+3] = 0.;
     }
+//    qDebug() << min(xPlot) << max(xPlot);
+//    for(int i=0; i<xPlot.size(); ++i) {
+//        qDebug() << xPlot[i] << yPlot[i];
+//    }
 }
 
 void HistWidget::SetX(const QVector<double>& xNew)
@@ -166,7 +158,7 @@ void HistWidget::Plot()
     }
     graph()->setName("Histogram");
     graph()->setData(xPlot, yPlot);
-    graph()->setLineStyle(QCPGraph::lsLine);
+    graph()->setLineStyle(QCPGraph::lsStepRight);
     xAxis->setRange(min(xPlot) - binsGap/2., max(xPlot) + binsGap/2.);
     yAxis->setRange(0., max(yPlot)*1.1);
     axisRect()->setupFullAxesBox();
