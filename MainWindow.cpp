@@ -76,6 +76,7 @@ void MainWindow::LoadFile()
             analysisWidget->SetHistData(x, y);
             analysisWidget->SetNBins(100);
             analysisWidget->SetBinWidth(1.);
+            analysisWidget->SetUserDispRange(-100., 100);
             analysisWidget->Plot();
         } else {
             qDebug() << "Cannot read  ASCII .stl file";
