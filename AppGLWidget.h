@@ -10,7 +10,7 @@ class AppGLWidget : public QOpenGLWidget, protected QOpenGLFunctions
     Q_OBJECT
 
 public:
-    explicit AppGLWidget(QOpenGLWidget *parent = 0);
+    explicit AppGLWidget(QWidget *parent = 0);
     ~AppGLWidget();
 
     void SetModel(Model model);

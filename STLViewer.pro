@@ -15,14 +15,17 @@ TEMPLATE = app
 SOURCES += main.cpp \
     AppGLWidget.cpp \
     STLParser.cpp \
-    Model.cpp
+    Model.cpp \
+    MainWindow.cpp
 
 HEADERS  += \
     AppGLWidget.h \
     STLParser.h \
-    Model.h
+    Model.h \
+    MainWindow.h
 
-FORMS    +=
+FORMS    += \
+    MainWindow.ui
 
 DISTFILES += \
     .gitignore
