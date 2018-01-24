@@ -128,7 +128,8 @@ void AppGLWidget::DrawModel()
     QVector3D v;
     STLTriangle t;
     QVector3D center = m.GetCenter();
-
+    qDebug() << m.xMin();
+    qDebug() << m.xMax();
     for(size_t i = 0; i < m.GetNTriangles(); ++i) {
         t = m.GetTriangle(i);
         glBegin(GL_TRIANGLES);
@@ -136,6 +137,7 @@ void AppGLWidget::DrawModel()
             glNormal3f(n.x(), n.y(), n.z());
             for(size_t j=0; j<3; ++j) {
                 v = t.GetVertex(j);
+//                qDebug() << v.y();
                 glVertex3f(v.x()-center.x(),
                            v.y()-center.y(),
                            v.z()-center.z());

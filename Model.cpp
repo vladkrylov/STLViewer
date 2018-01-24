@@ -1,3 +1,4 @@
+#include <limits>
 #include "Model.h"
 
 // ################################################
@@ -86,12 +87,14 @@ void Model::Reset()
     triangles.clear();
     initialized = false;
 
-    min_x = 0.0f;
-    max_x = 0.0f;
-    min_y = 0.0f;
-    max_y = 0.0f;
-    min_z = 0.0f;
-    max_z = 0.0f;
+    const float MAXIMUM_POSSIBLE = std::numeric_limits<float>::max();
+    const float MINIMUM_POSSIBLE = std::numeric_limits<float>::min();
+    min_x = MAXIMUM_POSSIBLE;
+    max_x = MINIMUM_POSSIBLE;
+    min_y = MAXIMUM_POSSIBLE;
+    max_y = MINIMUM_POSSIBLE;
+    min_z = MAXIMUM_POSSIBLE;
+    max_z = MINIMUM_POSSIBLE;
 }
 
 void Model::SetName(QString newName)
