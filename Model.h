@@ -30,7 +30,7 @@ class Model
 {
 public:
     Model();
-    Model(QVector<STLTriangle> stlModel);
+    Model(const QVector<STLTriangle>& stlModel);
 
     bool isInitialized();
     void DeInitialize();

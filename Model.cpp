@@ -79,17 +79,6 @@ Model::Model()
     Reset();
 }
 
-Model::Model(QVector<STLTriangle> stlModel)
-{
-    if (stlModel.size() > 0) {
-        initialized = true;
-        triangles.reserve(stlModel.size());
-        for(int i=0; i<stlModel.size(); ++i) {
-            AddTriangle(stlModel[i]);
-        }
-    }
-}
-
 void Model::Reset()
 {
     name = "";
